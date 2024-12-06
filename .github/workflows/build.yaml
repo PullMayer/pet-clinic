@@ -23,6 +23,6 @@ jobs:
           
           docker build --tag ghcr.io/pullmayer/pet-clinic:latest -f Dockerfile .
           
-          docker login --username pullmayer --password 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 ghcr.io
+          docker login --username pullmayer --password $GITHUB_ACCESSTOKEN ghcr.io
           
           docker push ghcr.io/pullmayer/pet-clinic:latest
