@@ -1,23 +1,28 @@
 name: Docker Build and Release
 on: [ push ]
 env:
-#### An dieser Stelle müssen eure persönlichen Umgebungsvariablen eingetragen werden
+  #### An dieser Stelle müssen eure persönlichen Umgebungsvariablen eingetragen werden
   # Tipp: Die Token/der API-Key werden als Secrets in den Repository-Settings eingetragen und hier referenziert.
-  GITHUB_ACCESSTOKEN: ${{ secrets.GITHUB_ACCESSTOKEN }}
+  GITHUB_ACCESSTOKEN: ${{ secrets.ACCESS_TOKEN }}
 jobs:
   compile:
     name: Compile
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup Java
-      uses: actions/setup-java@v2
-      with:
-        distribution: temurin
-        java-version: 11
-        cache: maven
-  
-    - name: Compile, build and push
-      run: |
-        #### AUFGABE COMPILE, DOCKER BUILD UND PUSH
-          # hier ist Platz für maven package und docker build
+      - uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 11
+          cache: maven
+
+      - name: Compile, build and push
+        run: |
+          mvn package
+          
+          docker build --tag ghcr.io/pullmayer/pet-clinic:latest -f Dockerfile .
+          
+          docker login --username pullmayer --password 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 ghcr.io
+          
+          docker push ghcr.io/pullmayer/pet-clinic:latest
